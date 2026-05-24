@@ -1094,7 +1094,7 @@ instr(0xd2,10);
 endinstr;
 
 instr(0xd3,11);
-   tstates+=out(tstates,a,fetch(pc),a);
+   tstates+=0;//out(tstates,a,fetch(pc),a);
    pc++;
 endinstr;
 
@@ -1137,7 +1137,7 @@ endinstr;
 
 instr(0xdb,11);
    {unsigned short t;
-      a=t=in(tstates,a,fetch(pc));
+      a=t=0;//in(tstates,a,fetch(pc));
       tstates+=t>>8;
       pc++;
    }
