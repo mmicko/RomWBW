@@ -249,7 +249,7 @@ TIMVDU_VDARDC:
 ; **********************************************************************
 ; **  Terminal emulation
 ; **********************************************************************
-SCROLL: .EQU	0xD0			; scroll register
+SCROLL .EQU	$D0			; scroll register
 ;
 ; Prints one character
 ;
