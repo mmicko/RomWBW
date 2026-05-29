@@ -9254,6 +9254,10 @@ HB_MODSTART	.EQU	$
 #IF (XOSENABLE)
   #INCLUDE "xosera.asm"
 #ENDIF
+
+#IF (TIMENABLE)
+  #INCLUDE "timvdu.asm"
+#ENDIF
 ;
 ;--------------------------------------------------------------------------------------------------
 ;   KEYBOARD MODULES
