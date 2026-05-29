@@ -9255,7 +9255,7 @@ HB_MODSTART	.EQU	$
   #INCLUDE "xosera.asm"
 #ENDIF
 
-#IF (TIMENABLE)
+#IF (T011ENABLE)
   #INCLUDE "timvdu.asm"
 #ENDIF
 ;
