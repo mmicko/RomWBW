@@ -701,6 +701,10 @@ CFGSIZ	.EQU	$ - CFGTBL
 ;
 	.DB	27,	$50,	$51,	$52,	$FF,	$FF,	$FF	; RC2014 W/ RC SOUND MODULE (COLECO)
 	.DW	HWSTR_COLECO
+
+	.DB	29,	$FC,	$F4,	$FC,	$00,	$FF,	$FF	; TIM-011 SOUND MODULE
+	.DW	HWSTR_TIM011
+
 ;
 	.DB	$FF					; END OF TABLE MARKER
 ;
@@ -779,6 +783,7 @@ HWSTR_HEATH	.DB	"HEATH H8 MSX Module",0
 HWSTR_MSX	.DB	"MSX Standard Ports (A0H/A1H)",0
 HWSTR_RC	.DB	"RCBus Standard Ports (D8H/D0H)",0
 HWSTR_COLECO	.DB	"RCBus Coleco Ports (50H/51H)",0
+HWSTR_TIM011	.DB	"TIM-011 Sound Module",0
 
 MSGUNSUP	.db	"MYM files not supported with HBIOS yet!\r\n", 0
 
