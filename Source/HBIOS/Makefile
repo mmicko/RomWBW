@@ -44,6 +44,8 @@ endif
 
 ifeq ($(ROM_PLATFORM),SZ180)
 	HWMON=sz180mon.bin
+else ifeq ($(ROM_PLATFORM),TIM011)
+	HWMON=bootrom.bin 
 else
 	HWMON=hwmon.bin
 endif
@@ -111,6 +113,10 @@ sysconf.com:
 sz180mon.bin:
 	$(ZXCC) $(CPM)/SLR180 -sz180mon/FH
 	$(ZXCC) $(CPM)/MLOAD25 -sz180mon.bin=sz180mon
+
+bootrom.bin: bootrom.z80
+	$(ZXCC) $(CPM)/SLR180 -bootrom/FH
+	$(ZXCC) $(CPM)/MLOAD25 -bootrom.bin=bootrom
 
 tastybasic.bin:
 	cp ../TastyBasic/src/$@ .
