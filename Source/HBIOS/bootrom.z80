@@ -721,6 +721,8 @@ FDEND:
 	RET
 ;
 ;
+HERE2:	DS	(START + 8192 - 1) - $
+	DB	0FFH
 	.LIST
 ;
 ;
