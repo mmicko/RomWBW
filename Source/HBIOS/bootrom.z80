@@ -199,6 +199,15 @@ CLRSCR0:
 ;ASCI channel 1 - console port
 ;
 CONT:
+
+; Turn Motor on since ROMWBW turns it OFF
+	LD	A,0FFH			; No, mark it on
+	OUT0	(TRDR),A		; And turn it on
+	LD	A,10H
+	OUT0	(CNTR),A
+	LD	B,180			; 1.8 seconds for spin-up
+	CALL	DELAY10MS
+
 	LD	HL,CA0			; Initialize
 	LD	C,CNTLA0		; First six
 	LD	B,6			; Registers
@@ -242,6 +251,9 @@ CONT:
 ;
 ;MMU - initialize to point to first RAM bank
 ;
+; ROMWBW have CBAR at 80, CBR at 70 and BBR 18
+
+; Common area low 1111    bank area 1000 
 	LD	A,0F8H			; Initially assume 27256 ROM
 	OUT0	(CBAR),A		; Rom in common area 0
 	LD	A,40H			; Ram physically at 40000h
