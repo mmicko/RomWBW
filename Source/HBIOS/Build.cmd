@@ -112,6 +112,10 @@ if %Platform%==SZ180 (
     zxcc slr180 -sz180mon/fh || exit /b
     zxcc mload25 -sz180mon || exit /b
     set HwMon=sz180mon.com
+) else if %Platform%==TIM011 (
+    zxcc slr180 -bootrom/fh || exit /b
+    zxcc mload25 -bootrom || exit /b
+    set HwMon=bootrom.com
 ) else (
     call :asm hwmon || exit /b
     set HwMon=hwmon.bin
