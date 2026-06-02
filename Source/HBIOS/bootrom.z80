@@ -251,14 +251,23 @@ CONT:
 ;
 ;MMU - initialize to point to first RAM bank
 ;
-; ROMWBW have CBAR at 80, CBR at 70 and BBR 18
+; Starting values from RomWBW: CBAR 80h, CBR 70h, BBR 18h
 
-; Common area low 1111    bank area 1000 
-	LD	A,0F8H			; Initially assume 27256 ROM
-	OUT0	(CBAR),A		; Rom in common area 0
-	LD	A,40H			; Ram physically at 40000h
+	LD	A,038H			; Set RAM 40000h physical at 8000h logical
+	OUT0	(CBR),A
+
+	LD	HL,00000H
+	LD	DE,08000H
+	LD	BC,02000H
+	LDIR				; Copy ROM to RAM
+
+	LD	A,40H			; Move RAM physical 40000h to 0000h logical
 	OUT0	(BBR),A			; Ram in bank area
-	OUT0	(CBR),A			; Ram in common area 1
+	OUT0	(CBR),A	
+
+	LD	A,080H			; Initially assume 27256 ROM
+	OUT0	(CBAR),A		; Rom in common area 0
+
 ;
 	LD	HL,0FFFFH
 	LD	B,255
