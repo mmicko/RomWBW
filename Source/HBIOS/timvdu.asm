@@ -253,12 +253,7 @@ SCROLL .EQU	$D0			; scroll register
 ;
 ; Prints one character
 ;
-;PREND:
-;	RET
 PRINT_CHAR:
-	LD	A,C				;C is char to print
-	SUB	020H				;-32
-	LD	C,A
 	LD	B,10				;char is 10 pixels
 	MLT BC				;char * 10 (pixela)
 	LD	HL,CHARSET
