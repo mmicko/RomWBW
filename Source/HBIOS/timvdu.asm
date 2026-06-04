@@ -99,6 +99,8 @@ Loop:
 	BIT     7,B
 	JR      NZ,Loop 
 
+	CALL	REVERSE_CURSOR_POS
+
 	XOR	A			; SIGNAL SUCCESS
 	RET
 
@@ -131,7 +133,7 @@ TIMVDU_VDASCS:
 
 TIMVDU_VDASCP:
 	; UNREVERSE THE CURRENT CURSOR
-;	CALL	REVERSE_CURSOR_POS
+	CALL	REVERSE_CURSOR_POS
 ;	CALL	TIMVDU_XY		; SET CURSOR POSITION
 	LD A,D
 	LD (ROW_POSITION), A
@@ -139,7 +141,7 @@ TIMVDU_VDASCP:
 	LD (COLUMN_POSITION), A
 
 ;	; REVERSE VIDEO THE CHARACTER AT THE NEW CURSOR POSITION
-;	CALL	REVERSE_CURSOR_POS
+	CALL	REVERSE_CURSOR_POS
 	XOR	A		; SIGNAL SUCCESS
 	RET
 
@@ -176,12 +178,10 @@ TIMVDU_VDASCO:
 	RET
 
 TIMVDU_VDAWRC:
-;	CALL	REVERSE_CURSOR_POS
-;	LD	A,E		; CHARACTER TO WRITE GOES IN A
-;	CALL	TIMVDU_PUTCHAR	; PUT IT ON THE SCREEN
-;	CALL	REVERSE_CURSOR_POS
+	CALL	REVERSE_CURSOR_POS
 	LD	C,E		; CHARACTER TO WRITE GOES IN A
 	CALL PRINT_CHAR
+	CALL	REVERSE_CURSOR_POS
 	XOR	A		; SIGNAL SUCCESS
 	RET
 
@@ -214,6 +214,7 @@ TIMVDU_VDACPY:
 	RET
 
 TIMVDU_VDASCR:
+	CALL	REVERSE_CURSOR_POS
 	LD	A,E
 	CALL	SCROLL_ONE_LINE
 ;	OR	A		; SET FLAGS
@@ -226,6 +227,7 @@ TIMVDU_VDASCR:
 ;	NEG			; A IS NEGATIVE, BUT NEED IT POSITIVE
 ;	LD	E,A		; LINES TO SCROLL TO E
 ;	CALL	TIMVDU_SCROLL	; SCROLL REVERSE 'E' LINES
+	CALL	REVERSE_CURSOR_POS
 	XOR	A		; SIGNAL SUCCESS
 	RET
 
@@ -250,6 +252,63 @@ TIMVDU_VDARDC:
 ; **  Terminal emulation
 ; **********************************************************************
 SCROLL .EQU	$D0			; scroll register
+
+REVERSE_CURSOR_POS:
+    PUSH    AF
+    PUSH    BC
+    PUSH    DE
+    PUSH    HL
+
+    CALL    GET_ADDRESS
+    LD      A,9
+	ADD		A,C
+	LD		C,A
+
+    JR      C,REVERSE_CURSOR_HALF
+
+REVERSE_CURSOR_FULL:
+    IN      A,(C)	; invert full byte
+    XOR     0FFH
+    OUT     (C),A
+
+    INC     B		; go to next location horizontally
+    
+	IN      A,(C)	; invert low nibble
+    LD      H,A
+    AND     0FH
+    XOR     0FH
+    LD      L,A
+    LD      A,H
+    AND     0F0H
+    OR      L
+    OUT     (C),A
+
+    JR      REVERSE_CURSOR_DONE
+
+REVERSE_CURSOR_HALF:
+    IN      A,(C)	; invert high nibble
+    LD      H,A
+    AND     0F0H
+    XOR     0F0H
+    LD      L,A
+    LD      A,H
+    AND     0FH
+    OR      L
+    OUT     (C),A
+
+    INC     B		; go to next location horizontally
+
+    IN      A,(C)	; invert full byte
+    XOR     0FFH
+    OUT     (C),A
+
+REVERSE_CURSOR_DONE:
+    POP     HL
+    POP     DE
+    POP     BC
+    POP     AF
+    RET
+
 ;
 ; Prints one character
 ;
